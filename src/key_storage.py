@@ -88,7 +88,7 @@ def read_key_from_file(filename):
         return file_object.read()
 
 # Example usage
-# Generate a new encryption key
+# Key encryption block start here
 encryption_key = generate_encryption_key()
 
 # Initialize the cipher suite
@@ -96,10 +96,10 @@ cipher_suite = initialize_cipher(encryption_key)
 # Read the private key from the PEM file
 
 pem_file_name = "private_key.pem"
-generated_key = read_key_from_pem(pem_file_name)
+original_private_key = read_key_from_pem(pem_file_name)
 
 # Encrypt the generated key
-encrypted_private_key = encrypt_key(cipher_suite, generated_key)
+encrypted_private_key = encrypt_key(cipher_suite, original_private_key)
 
 # Store the encrypted private key
 store_encrypted_key(encrypted_private_key, 'encrypted_private_key.bin')
@@ -107,19 +107,16 @@ store_encrypted_key(encrypted_private_key, 'encrypted_private_key.bin')
 # Create an audit log entry for the private key encryption
 create_audit_log('encrypt', 'private_key.pem')
 
+# Key encryption block ends here
 
-# # To decrypt the key, load the encrypted key and use the cipher suite
-# loaded_encrypted_key = load_encrypted_key('encrypted_private_key.bin')
-# decrypted_key = decrypt_key(cipher_suite, loaded_encrypted_key)
-#
-# # Save the original key to a file
-# save_key_to_file(generated_key, pem_file_name)
-#
-# # Verify the decrypted key is the same as the original
-# assert decrypted_key == pem_file_name
-# #
-# # # Create an audit log entry for decryption
-# # create_audit_log('decrypt', 'my_secret_key')
-# #
-# # # Note: In a real-world scenario, the encryption key should be stored securely
-# # # and not in the same location as the encrypted keys.
+# Key decryption block starts here
+encrypted_key = load_encrypted_key("encrypted_private_key.bin")
+
+# Decrypt the encrypted private key
+decrypted_private_key = decrypt_key(cipher_suite, encrypted_key)
+
+# Verify the decrypted key is the same as the original
+assert decrypted_private_key == original_private_key, "Decryption failed: The decrypted key does not match the original."
+
+# If the assertion passes, the decryption is successful and the keys match
+print("Decryption successful: The decrypted key matches the original.")
