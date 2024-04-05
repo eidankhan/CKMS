@@ -115,6 +115,9 @@ encrypted_key = load_encrypted_key("encrypted_private_key.bin")
 # Decrypt the encrypted private key
 decrypted_private_key = decrypt_key(cipher_suite, encrypted_key)
 
+# Create an audit log entry for the private key encryption
+create_audit_log('decrypt', 'encrypted_private_key.bin')
+
 # Verify the decrypted key is the same as the original
 assert decrypted_private_key == original_private_key, "Decryption failed: The decrypted key does not match the original."
 
